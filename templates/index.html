@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <title>PaperJS - Starter Canvas</title>
+        <!-- An AMD-loader like RequireJS is necessary for srlib's asynchronous modules -->
+        <script src="/static/js/require.js"></script>
+        <!-- Load srlib following RequireJS -->
+        <script src="/static/js/srlib.js"></script> 
+        <!--Paper JS-->
+        <script src="/static/js/paper-full.js"></script>
+        <!-- DOM to Image -->
+        <script src="/static/js/dom-to-image.js"></script>
+        <!-- FileSaver -->
+        <script src="/static/js/FileSaver.js"></script>
+
+        <script src="/static/js/reimg.js"></script>
+
+
+        <!-- jquery -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+        <script src="/static/js/app.js"></script>
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+        <!--Fonts and styling-->
+        <link href="/static/css/style.css" rel='stylesheet' type='text/css'/>
+
+        <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel='stylesheet'>
+   
+    </head>
+    <body> 
+    <button id="recognize">Recognize</button>
+    <script type="text/paperscript" canvas="canvas">
+
+
+
+    var canvas = document.getElementById('canvas'),
+    ctx = canvas.getContext('2d');
+
+
+    function downloadCanvas(link, canvasId, filename) {
+        link.href = document.getElementById(canvasId).toDataURL();
+        link.download = filename;
+    }
+
+    /** 
+     * The event handler for the link's onclick event. We give THIS as a
+     * parameter (=the link element), ID of the canvas and a filename.
+    */
+    document.getElementById('download').addEventListener('click', function() {
+        downloadCanvas(this, 'canvas', 'test.png');
+    }, false);
+
+    /**
+     * Draw something to canvas
+     */
+    //doCanvas();
+
+
+                    
+    function onMouseDown(event) {
+        // PaperJS add a new Path object and initial starting point
+        // console.log(event.point);
+        path = new Path();
+        path.strokeColor = 'black';
+        path.strokeWidth = 2;
+        path.add(event.point);
+        
+        // SRLlib add a new Stroke object and initial starting point
+        stroke = new srlib.core.data.container.Stroke();
+        point = new srlib.core.data.container.Point(event.point.x,event.point.y)
+        if (typeof sketch == "undefined") {
+            sketch = new srlib.core.data.container.Sketch();
+        }
+        sketch.addStroke(stroke);
+        sketch.addPoint(point);
+        stroke.addPoint(point);
+    }
+
+    function onMouseDrag(event) {
+    // PaperJS add points to Path object on mouse drag
+    // console.log(event.point);
+    path.add(event.point);
+
+    // SRLlib add points to Stroke on mouse drag
+    point = new srlib.core.data.container.Point(event.point.x,event.point.y)
+    sketch.addPoint(point);
+    stroke.addPoint(point);
+    }
+
+    function onMouseUp(event) { 
+    
+    // Add evaluation / recognition functions or whatever you want here!
+    
+    }
+    
+    </script>   
+    <div class="row">
+        <!-- <div class="col-md-3"> -->
+        <canvas width="500" height="300" id="canvas">Sorry, no canvas available</canvas>
+        <a id="download">Download as image</a>
+            <!-- <canvas id="canvas" rezise="true" style="height: 300px;">
+                hello
+            </canvas> -->
+        <!-- </div> -->
+        <!-- <div class="col-md-9"> -->
+            <!-- Hello -->
+        <!-- </div> -->
+    </div>
+    
+    
+   </body>
+ </html>
