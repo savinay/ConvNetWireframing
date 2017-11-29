@@ -8,40 +8,104 @@
         <!--Paper JS-->
         <script src="/static/js/paper-full.js"></script>
         <!-- DOM to Image -->
-        <script src="/static/js/dom-to-image.js"></script>
+        <!-- <script src="/static/js/dom-to-image.js"></script> -->
         <!-- FileSaver -->
-        <script src="/static/js/FileSaver.js"></script>
+        <!-- <script src="/static/js/FileSaver.js"></script> -->
 
-        <script src="/static/js/reimg.js"></script>
+        <!-- <script src="/static/js/reimg.js"></script> -->
 
 
         <!-- jquery -->
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
-        <script src="/static/js/app.js"></script>
-
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.0/d3.min.js"></script>
+        <script src="/static/js/c3.min.js"></script>
+
+        <script src="/static/js/chart.js"></script>
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
         <!--Fonts and styling-->
         <link href="/static/css/style.css" rel='stylesheet' type='text/css'/>
+
+        <link rel="stylesheet" type="text/css" href="/static/css/c3.css">
 
         <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel='stylesheet'>
    
     </head>
     <body> 
-    <button id="recognize">Recognize</button>
+    <!-- <button id="recognize">Recognize</button> -->
     <script type="text/paperscript" canvas="canvas">
 
+    var renderChart = function (res) {
+        console.log(res['0']);
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            theme: "light1", // "light1", "light2", "dark1", "dark2"
+            title:{
+                text: ""
+            },
+            axisY: {
+                title: ""
+            },
+            data: [{        
+                type: "column",  
+                showInLegend: false, 
+                //legendMarkerColor: "grey",
+                legendText: "",
+                dataPoints: [      
+                    { y: res['0'][0], label: "Image" },
+                    { y: res['0'][1],  label: "Video" },
+                    { y: res['0'][2],  label: "Navbar" },
+                    { y: res['0'][3],  label: "Button" },
+                    { y: res['0'][4],  label: "Dropdown" }
+                ]
+            }]
+        });
+        chart.render();
+    }
+
+
+    
 
 
     var canvas = document.getElementById('canvas'),
     ctx = canvas.getContext('2d');
+    ctx.lineWidth=10;
+
+    
+    //ctx.moveTo(170, 80);
+
+    canvas.onmousedown = function (e) {
+        e.preventDefault();
+        ctx.beginPath();
+        ctx.stroke();
+    }
+    
 
 
     function downloadCanvas(link, canvasId, filename) {
-        link.href = document.getElementById(canvasId).toDataURL();
-        link.download = filename;
+        var img = document.getElementById(canvasId).toDataURL();
+        //var file = dataURItoBlob(img);
+        //console.log(file);
+        //var data = new FormData();
+        //data.append('media[]', file, 'elfie.png');
+        //link.download = filename;
+        //console.log(data);
+        $.ajax({
+          type: "POST",
+          url: "/save",
+          data:{
+            imageBase64: img,
+            class: "image"
+          }
+        }).done(function(res) {
+          console.log(res);
+          renderChart(res);
+          //window.location = "/video"
+          
+        });
     }
 
     /** 
@@ -51,6 +115,20 @@
     document.getElementById('download').addEventListener('click', function() {
         downloadCanvas(this, 'canvas', 'test.png');
     }, false);
+
+
+    document.getElementById('clear').addEventListener('click', function() {
+        //$('#canvas').sketch('actions',[]);
+        ctx.closePath();
+        //ctx.lineWidth = 5;
+        //context.strokeStyle = 'blue';
+        //ctx.stroke();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //var ctx = canvas.getContext('2d');
+        ctx.beginPath();
+    }, false);
+
+
 
     /**
      * Draw something to canvas
@@ -62,6 +140,7 @@
     function onMouseDown(event) {
         // PaperJS add a new Path object and initial starting point
         // console.log(event.point);
+        ctx.beginPath();
         path = new Path();
         path.strokeColor = 'black';
         path.strokeWidth = 2;
@@ -95,18 +174,33 @@
     
     }
     
-    </script>   
-    <div class="row">
-        <!-- <div class="col-md-3"> -->
-        <canvas width="500" height="300" id="canvas">Sorry, no canvas available</canvas>
-        <a id="download">Download as image</a>
-            <!-- <canvas id="canvas" rezise="true" style="height: 300px;">
-                hello
-            </canvas> -->
-        <!-- </div> -->
-        <!-- <div class="col-md-9"> -->
-            <!-- Hello -->
-        <!-- </div> -->
+    </script> 
+    <div class="container">  
+        <div class="row text-center">
+            <div class="col-md-6">
+                <div>
+                    <h3>Sketch: </h3>
+                    <!-- <img src="/static/img/image.png" style="height:200px; width: 200px;"> -->
+                    <button id="clear" class="btn btn-lg btn-primary">Clear</button>
+                </div>
+                <br>
+                <div class="box" style="margin-left: 50px;" class="text-center">
+                    <canvas width="500" height="300" id="canvas" style="width: 500px; height: 300px;" type=file name=file>Sorry, no canvas available</canvas>
+                </div>
+            
+
+                <br>
+                <br>
+                <div class="text-center">
+                    <a type="submit" value="Next" class="btn btn-lg btn-primary btn-block"  id="download" style="width:500px; margin-left:50px;">Next</a>
+                </div>
+                <!-- <button id="clear" class="btn btn-primary">Clear</button> -->
+            </div>
+            <div class="col-md-6" style="margin-top: 130px;">
+                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+            </div>
+
+        </div>
     </div>
     
     
