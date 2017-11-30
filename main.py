@@ -63,6 +63,7 @@ def allowed_file(filename):
 @app.route('/save', methods=['POST'])
 def get_image():
     model = load_model('./model/model.h5')
+    # model = load_model('./model/latest_model.h5')
     image_b64 = request.values['imageBase64']
     clss = request.values['class']
     random_number = random.randint(0, 100000)
