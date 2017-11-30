@@ -323,7 +323,7 @@ model.fit_generator(train_generator, steps_per_epoch=len(X_train)//16, epochs=10
 
 # In[52]:
 
-plot_history(history)
+# plot_history(history)
 
 
 # In[86]:

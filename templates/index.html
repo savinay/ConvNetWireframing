@@ -72,16 +72,16 @@
 
     var canvas = document.getElementById('canvas'),
     ctx = canvas.getContext('2d');
-    ctx.lineWidth=10;
+    //ctx.lineWidth=10;
 
     
     //ctx.moveTo(170, 80);
 
-    canvas.onmousedown = function (e) {
-        e.preventDefault();
-        ctx.beginPath();
-        ctx.stroke();
-    }
+    //canvas.onmousedown = function (e) {
+        //e.preventDefault();
+        //ctx.beginPath();
+        //ctx.stroke();
+    //}
     
 
 
@@ -117,16 +117,16 @@
     }, false);
 
 
-    document.getElementById('clear').addEventListener('click', function() {
+    //document.getElementById('clear').addEventListener('click', function() {
         //$('#canvas').sketch('actions',[]);
-        ctx.closePath();
+        //ctx.closePath();
         //ctx.lineWidth = 5;
         //context.strokeStyle = 'blue';
         //ctx.stroke();
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
         //var ctx = canvas.getContext('2d');
-        ctx.beginPath();
-    }, false);
+        //ctx.beginPath();
+    //}, false);
 
 
 
@@ -140,7 +140,7 @@
     function onMouseDown(event) {
         // PaperJS add a new Path object and initial starting point
         // console.log(event.point);
-        ctx.beginPath();
+        //ctx.beginPath();
         path = new Path();
         path.strokeColor = 'black';
         path.strokeWidth = 2;
@@ -179,9 +179,9 @@
         <div class="row text-center">
             <div class="col-md-6">
                 <div>
-                    <h3>Sketch: </h3>
+                    <h3>Sketch a wireframe: </h3>
                     <!-- <img src="/static/img/image.png" style="height:200px; width: 200px;"> -->
-                    <button id="clear" class="btn btn-lg btn-primary">Clear</button>
+                    <!-- <button id="clear" class="btn btn-lg btn-primary">Clear</button> -->
                 </div>
                 <br>
                 <div class="box" style="margin-left: 50px;" class="text-center">
@@ -192,7 +192,7 @@
                 <br>
                 <br>
                 <div class="text-center">
-                    <a type="submit" value="Next" class="btn btn-lg btn-primary btn-block"  id="download" style="width:500px; margin-left:50px;">Next</a>
+                    <a type="submit" value="Next" class="btn btn-lg btn-primary btn-block"  id="download" style="width:500px; margin-left:50px;">Recognize</a>
                 </div>
                 <!-- <button id="clear" class="btn btn-primary">Clear</button> -->
             </div>
