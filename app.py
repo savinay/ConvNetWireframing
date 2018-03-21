@@ -6,7 +6,7 @@ from PIL import Image
 from pylab import *
 import os
 import numpy as np
-import cv2
+# import cv2
 import json
 import scipy.misc as image
 from werkzeug.utils import secure_filename
