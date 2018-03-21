@@ -13,7 +13,8 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 import base64
 import re
-import cStringIO
+from io import StringIO
+from io import BytesIO
 import random
 import tensorflow as tf
 
@@ -62,15 +63,15 @@ def allowed_file(filename):
 
 @application.route('/save', methods=['POST'])
 def get_image():
-    # model = load_model('./model/model.h5')
     model = load_model('./model/latest_model.h5')
-    # model = load_model('./model/latest_model_new.h5')
     image_b64 = request.values['imageBase64']
     clss = request.values['class']
     random_number = random.randint(0, 100000)
     file_name = clss + str(random_number)
-    image_data = re.sub('^data:image/.+;base64,', '', image_b64).decode('base64')
-    image_PIL = Image.open(cStringIO.StringIO(image_data))
+    image_data = re.sub('^data:image/.+;base64,', '', image_b64)
+    # .decode('base64')
+
+    image_PIL = Image.open(BytesIO(base64.b64decode(image_data)))
     image_np = np.array(image_PIL)
     # print image_np
     im = image.imresize(image_np, (150,150))
