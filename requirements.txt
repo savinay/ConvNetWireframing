@@ -6,3 +6,4 @@ tensorflow
 matplotlib==1.5.3
 #cv2==3.3.0
 sklearn
+gunicorn
